@@ -1,6 +1,6 @@
 # CBORPC
 
-Concise RPC framework based on CBOR.
+Concise RPC framework based on [RFC 8949 (CBOR)](https://www.rfc-editor.org/rfc/rfc8949.html).
 
 ## Server and Client
 
@@ -66,6 +66,8 @@ message = tstr
 ```
 
 Note that a CIDL definition is valid in CDDL since it is using comment for its own part.
+
+### Details
 
 The IDL has only two roles.
 - Provides context to the compiler for static typing.
