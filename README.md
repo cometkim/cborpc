@@ -11,13 +11,18 @@ import { FetchTransport } from 'cborpc-transport-fetch/node';
 
 const service = new CBORPC.Service({
   codec: new CBOR.Codec({ ...CBOR.all }),
-  transport: new FetchTransport({ fetch }),
   exports: {
     hello: name => {
       return `Hello, ${name}!`;
     },
   },
 });
+
+const handler = new FetchTransport.Handler({
+  service,
+});
+
+handler.handle(request) // Response
 ```
 
 ```ts
@@ -27,11 +32,14 @@ import { FetchTransport } from 'cborpc-transport-fetch/web';
 
 const client = new CBORPC.Client({
   codec: new CBOR.Codec({ ...CBOR.all }),
-  transport: new FetchTransport({ fetch }),
+});
+
+const stub = new FetchTransport.Stub({
+  fetch,
   url: new URL('http://localhost:8080/cborpc'),
 });
 
-const result = await client.call.hello('Tim'); // <- Send CBORPC request via a proxy
+const result = await stub.call.hello('Tim'); // <- Send CBORPC request via a proxy
 console.log(result);
 // output: Hello, name!
 ```
@@ -98,18 +106,15 @@ type Exports = {
 const name = tstr;
 const message = tstr;
 
-export const codec = new Codec<ServiceExport>({ name, message });
+export const codec = new Codec<Exports>({ name, message });
 ```
 
 ```ts
 import * as CBORPC from 'cborpc/client';
-import { FetchTransport } from 'cborpc-transport-websocket/web';
 import { codec } from './__generated__/hello.mjs';
 
 const client = new CBORPC.Client({
   codec,
-  transport: new FetchTransport(),
-  url: new URL('http://localhost:8080/cborpc'),
 });
 ```
 
