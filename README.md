@@ -22,7 +22,11 @@ const handler = new FetchTransport.Handler({
   service,
 });
 
-handler.handle(request) // Response
+self.addEventListener('fetch', event => {
+  return event.respondWith(
+    handler.handle(event.request),
+  );
+});
 ```
 
 ```ts
@@ -35,6 +39,7 @@ const client = new CBORPC.Client({
 });
 
 const stub = new FetchTransport.Stub({
+  client,
   fetch,
   url: new URL('http://localhost:8080/cborpc'),
 });
